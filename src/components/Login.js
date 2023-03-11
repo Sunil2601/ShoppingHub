@@ -8,6 +8,7 @@ import LoginPage from '../images/LoginPage.svg'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserData } from '../slices/userSlice';
+
 import { getCartData } from '../slices/cartSlice';
 import { getOrdersData } from '../slices/ordersSlice';
 const Login = () => {
@@ -32,7 +33,7 @@ const Login = () => {
             <Form onSubmit={handleSubmit(onFormSubmit)}>
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label className='fontStyle'>Username</Form.Label>
-                <Form.Control type="text" placeholder="Enter username" {...register("username", { required: true })} />
+              <Form.Control type="text" placeholder="Enter username" {...register("username", { required: true })} />
                 {errors.username && <p className='text-danger'>*username required</p>}
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPassword">

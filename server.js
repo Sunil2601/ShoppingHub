@@ -57,4 +57,4 @@ server.use((err,req,res,next)=>{
     res.send({message:`${err.message}`})})
 
 const PORT=process.env.PORT
-server.listen(PORT,()=>console.log(`server listening to port ${PORT}....`))
+server.listen(1000,()=>console.log(`server listening to port ${PORT}....`))

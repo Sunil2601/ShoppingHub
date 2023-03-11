@@ -49,7 +49,7 @@ const NavB = () => {
       {isFulfilled ?
         <Navbar bg='dark' variant="dark "expand="md">
          
-            <Navbar.Brand className="MyNavLink">Amazon</Navbar.Brand>
+            <Navbar.Brand className="MyNavLink">ShoppingHub</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">
@@ -73,7 +73,7 @@ const NavB = () => {
         </Navbar> :
         <Navbar bg="dark" variant="dark">
        
-          <Navbar.Brand>Amazon</Navbar.Brand>
+          <Navbar.Brand>Shopping Hub</Navbar.Brand>
           <Nav className="me-auto">
             <NavLink className="nav-link " to="/">Home</NavLink>
             <NavLink className="nav-link" to="/Login">Login</NavLink>
