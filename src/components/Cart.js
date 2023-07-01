@@ -9,12 +9,71 @@ import '../Styles/Cards.css'
 import { Button } from 'react-bootstrap';
 import { clearCart, addProductToCart } from '../slices/cartSlice';
 import { addNewOrder, clearOrders } from '../slices/ordersSlice'
+import { useNavigate } from 'react-router-dom';
 const Cart = () => {
   const dispatch = useDispatch()
   const products = useSelector(state => state.cart.cartProducts)
   const user = useSelector(state => state.users.userData.username)
   const orders = useSelector(state => state.orders.ordersData)
- 
+  const navigate=useNavigate()
+
+  var formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 0,
+  });
+
+  const loadScript = (src) => {
+    return new Promise((resovle) => {
+      const script = document.createElement("script");
+      script.src = src;
+
+      script.onload = () => {
+        resovle(true);
+      };
+
+      script.onerror = () => {
+        resovle(false);
+      };
+
+      document.body.appendChild(script);
+    });
+  };
+
+  const displayRazorpay = async (x) => {
+    console.log(x)
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
+    if (!res) {
+      alert("You are offline... Failed to load Razorpay SDK");
+      return;
+    }
+    const options = {
+      key: 'rzp_test_MChgICeTf23XHC',
+      currency: "INR",
+      amount: totalAmount * 100,
+      name: "ShoppingHub",
+      description: "Thanks for purchasing",
+      image:
+        "https://mern-blog-akky.herokuapp.com/static/media/logo.8c649bfa.png",
+
+      handler: function (response) {
+        let date = new Date().toDateString();
+        dispatch(addNewOrder({ orders: x, amount: totalAmount, date: date }))
+        dispatch(clearCart());
+        alert("Order Placed Successfully")
+        navigate('/')
+      },
+      prefill: {
+        name: "ShoppingHub",
+      },
+    };
+
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  };
+
   let totalAmount = 0
   for (let i of products) totalAmount += (+i.price)
 
@@ -22,10 +81,11 @@ const Cart = () => {
     dispatch(removeCartProduct(ele))
   }
 
+
   const handleOrder = (x) => {
-    
+
     let date = new Date().toDateString();
-    dispatch(addNewOrder({ orders: x, amount: totalAmount,date:date }))
+    dispatch(addNewOrder({ orders: x, amount: totalAmount, date: date }))
     dispatch(clearCart());
     alert("Order Placed Successfully")
   }
@@ -46,7 +106,7 @@ const Cart = () => {
                       {ele.features}
                     </p>
                     <h4>{ele.price}</h4>
-                    <button className="btn homeCardButton" onClick={()=>remove(ele)}>Remove from Cart</button>
+                    <button className="btn homeCardButton" onClick={() => remove(ele)}>Remove from Cart</button>
                   </Card.Text>
                 </Card.Body>
               </Card>
@@ -55,12 +115,12 @@ const Cart = () => {
         }
       </div>
       {products.length > 0 ?
-       <div className="row mt-5 mb-5">
-        <div className="col col-sm-6 col-md-5 col-lg-4 p-5 text-center"> <h4>Total Price  : {totalAmount}</h4></div>
-        <div className="col col-sm-6 col-md-5 col-lg-2 p-5 text-center">
-          <button className="btn homeCardButton" onClick={()=>handleOrder(products)}> Buy Now</button>
+        <div className="row mt-5 mb-5">
+          <div className="col col-sm-6 col-md-5 col-lg-4 p-5 text-center"> <h4>Total Price  : {totalAmount}</h4></div>
+          <div className="col col-sm-6 col-md-5 col-lg-2 p-5 text-center">
+            <button className="btn homeCardButton" onClick={() => displayRazorpay(products)}> Buy Now</button>
+          </div>
         </div>
-       </div>
         :
         <></>
       }
