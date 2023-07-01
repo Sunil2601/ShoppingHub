@@ -50,7 +50,7 @@ const Cart = () => {
       return;
     }
     const options = {
-      key: 'rzp_test_MChgICeTf23XHC',
+      key: Payment_API_key,
       currency: "INR",
       amount: totalAmount * 100,
       name: "ShoppingHub",
